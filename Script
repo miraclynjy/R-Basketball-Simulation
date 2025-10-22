@@ -1,0 +1,78 @@
+#Variables
+twPt = 0
+thPt = 0
+
+#Functions
+attempts = function(x, p, pts){
+ sum = 0
+
+ for (i in 1:x){
+	if (runif(1) < p){
+		sum = sum + pts
+   }
+ }
+ return(sum)
+}
+
+cumulativeAttempts = function(x, p, pts){
+ sum = 0
+ total = numeric(x)
+
+ for (i in 1:x){
+	if (runif(1) < p){
+		sum = sum + pts
+   }
+	total[i] = sum
+ }
+ return(total)
+}
+
+#80 Shot Sim, will only output if more 2pts than 3 pts
+cat("Simulation 1: 80 Attempts \n")
+
+while (twPt <= thPt){
+	twPt = attempts(80, .484, 2)
+	thPt = attempts(80, .362, 3)
+}
+
+cat("Scored more from two point shots: ", twPt,
+"\nScored more from three point shots: ", thPt, "\n \n")
+
+#1000 Shot Sim
+cat("Simulation 2: 1000 Attempts \n")
+
+while (thPt <= twPt){
+	twPt = attempts(1000, .484, 2)
+	thPt = attempts(1000, .362, 3)
+}
+
+cat("Scored more from two point shots: ", twPt,
+"\nScored more from three point shots: ", thPt, "\n \n")
+
+#10, 80 attempt games
+cat("Simulation 3: 10, 80 Attempt Games \n")
+
+wins = 0
+for (i in 1:10){
+	twSc = attempts(80, .484, 2)
+	thSc = attempts(80, .362, 3)
+
+
+ if (twSc > thSc){
+	wins = wins + 1
+ }
+}
+
+cat("In 10, 80 attempt games, the team taking only two point shots beat the team taking three point shots ", wins, "times\n\n")
+
+#Graph
+cat("Okayyyy time to graph\n")
+
+twCum <- cumulativeAttempts(1000, .484, 2)
+thCum <- cumulativeAttempts(1000, .362, 3)
+
+plot(twCum, type = "l", col = "orange", xlab = "Number of Attempts", ylab = "Number of Points", main = "Points Scored - Three Point Attempts vs Two Point Attempts")
+lines(thCum, col = "green")
+legend("topleft", legend = c("Two Pointers", "Three Pointers"), col = c("orange", "green"), lty = 1)
+
+cat("\nOkayyyy all done!")
